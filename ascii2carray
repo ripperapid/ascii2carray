@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+""" Convert ASCII file to C-style char array
+
+This script mimics the output of "xxd -i <filename>" but it gives a NULL
+terminated char array instead of a length variable
+"""
+
+import os
+import sys
+import re
+
+if len(sys.argv) != 2:
+    print("Usage: {} <ascii-file>".format(os.path.basename(sys.argv[0])))
+    sys.exit(1)
+
+filename = sys.argv[1]
+
+chunksize = 12
+
+name = os.path.basename(filename)
+
+name = re.sub('[^0-9a-zA-Z]+', '_', name)
+
+if name[0].isdigit:
+    name = "_" + name
+
+output = "unsigned char {}[] = {{\n  ".format(name)
+
+with open(filename, 'r') as f:
+
+    while True:
+        chunk = f.read(chunksize)
+
+        if not chunk:
+            break
+
+        for c in chunk:
+            output += "0x%02x, " % ord(c)
+
+        if (len(chunk) == chunksize):
+            output += "\n  "
+
+    output += "0x00\n};\n"
+
+print(output)
