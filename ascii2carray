@@ -17,10 +17,13 @@ filename = sys.argv[1]
 
 chunksize = 12
 
+# Base array name on filename
 name = os.path.basename(filename)
 
+# Replace illegal characters with underscore
 name = re.sub('[^0-9a-zA-Z]+', '_', name)
 
+# Protect against leading digit
 if name[0].isdigit:
     name = "_" + name
 
