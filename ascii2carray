@@ -24,10 +24,10 @@ name = os.path.basename(filename)
 name = re.sub('[^0-9a-zA-Z]+', '_', name)
 
 # Protect against leading digit
-if name[0].isdigit:
+if name[:0].isdigit():
     name = "_" + name
 
-output = "unsigned char {}[] = {{\n  ".format(name)
+output = "unsigned char {}[] = {{\n ".format(name)
 
 with open(filename, 'r') as f:
 
@@ -38,11 +38,11 @@ with open(filename, 'r') as f:
             break
 
         for c in chunk:
-            output += "0x%02x, " % ord(c)
+            output += " 0x%02x," % ord(c)
 
         if (len(chunk) == chunksize):
-            output += "\n  "
+            output += "\n "
 
-    output += "0x00\n};\n"
+    output += "0x00\n};"
 
 print(output)
